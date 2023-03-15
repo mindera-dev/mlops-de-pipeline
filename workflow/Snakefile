@@ -28,11 +28,11 @@ rule all: # 전체 실행 룰
 rule sftp_odm: 
     output: 
         SFTP_MATCH1_FILE 
-	conda: 
+    conda: 
         f'{ENVS_DIR}/pipeline.yaml' 
-	params:
-		ODATE=ODATE 
-	group: 
+    params:
+	ODATE=ODATE 
+    group: 
        "pipeline" 
     script: 
        "scripts/sftp_odm.py" 
