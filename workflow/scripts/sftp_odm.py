@@ -8,11 +8,12 @@ import s3_exec
 def main():    
     #Run export(sftp) odm(match-1)
     print('sftp_odm start!!')
+    '''
     res = k8s_exec.exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-odm.py')
     print(res)
 
     #make result file
-    '''
+    
     f = open('/dags/mlops-pipeline-result/sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
