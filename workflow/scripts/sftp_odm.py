@@ -12,6 +12,7 @@ def main():
     print(res)
 
     #make result file
+    '''
     f = open('/dags/mlops-pipeline-result/sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
@@ -19,6 +20,7 @@ def main():
     f = open(snakemake.output[0],'w')
     f.write(str(res))
     f.close()
+    '''
 
 if __name__ == '__main__':
     main()
