@@ -3,8 +3,8 @@ rule sftp_odm:
         SFTP_MATCH1_FILE
 	conda:
 		f'{ENVS_DIR}/pipeline.yaml'
-	params:		
+	params:
 		ODATE=ODATE # YYYYMMDD 
 	group: "pipeline" 
     script:
-       "scripts/sftp_odm.py"
+       "../scripts/sftp_odm.py"
