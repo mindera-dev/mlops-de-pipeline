@@ -6,3 +6,4 @@ dependencies:
   - openjdk # open jdk 설치 
   - kubernetes
   - boto3
+  - python-kubernetes
