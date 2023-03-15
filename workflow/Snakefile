@@ -4,8 +4,8 @@ ODATE = config['odate'] # YYYYMMDD 포멧의 현재날짜, config.yaml 에서 �
 
 LOGS_DIR = 'logs' # 로그파일 디렉토리 
 RULES_DIR = 'rules' # 작업할 rule들이 보관된 디렉토리 
-ENVS_DIR = '../envs' # 환경변수 디렉토리 
-SCRIPTS_DIR = '../scripts' # 스크립트 디렉토리 
+ENVS_DIR = 'envs' # 환경변수 디렉토리 
+SCRIPTS_DIR = 'scripts' # 스크립트 디렉토리 
 
 EXPORT_LIMS_FILE = expand("mlops-pipeline-result/{ODATE}/export_lims.txt", ODATE=ODATE)
 SFTP_MATCH1_FILE = expand("mlops-pipeline-result/{ODATE}/sftp_odm.txt", ODATE=ODATE)
@@ -35,4 +35,4 @@ rule sftp_odm:
 	group: 
 		"pipeline" 
 	script: 
-		"scripts/sftp_odm.py" 
+		f'{SCRIPTS_DIR}/sftp_odm.py' 
