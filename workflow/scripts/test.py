@@ -14,7 +14,4 @@ response_iterator = paginator.paginate(
     Bucket="mlops-lims-dump-prod", 
     Prefix="output_files/"
 )
-
-
 print(response_iterator)
-
