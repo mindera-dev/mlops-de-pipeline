@@ -35,5 +35,5 @@ rule sftp_odm:
 	group: 
 		"pipeline" 
 	script: 
-		#f'{SCRIPTS_DIR}/sftp_odm.py' 
-		f'{SCRIPTS_DIR}/test.py' 
+		f'{SCRIPTS_DIR}/sftp_odm.py' 
+		
