@@ -18,12 +18,22 @@ def main():
     #Run export(sftp) odm(match-1)
     print('sftp_odm start!!')
     
-    res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-odm.py')
+    config.load_kube_config()
+    try:
+        c = Configuration().get_default_copy()
+    except AttributeError:
+        c = Configuration()
+        c.assert_hostname = False
+    Configuration.set_default(c)
+    core_v1 = core_v1_api.CoreV1Api()
+    
+    #res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-odm.py')
+    res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-odm.py', core_v1)
     print(res)
 
     #make result file
     
-    f = open('/dags/mlops-pipeline-result/sftp_odm.txt','w')
+    f = open('dags/mlops-pipeline-result/sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
 
