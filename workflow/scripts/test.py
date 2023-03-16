@@ -15,3 +15,9 @@ response_iterator = paginator.paginate(
     Prefix="output_files/"
 )
 print(response_iterator)
+try:
+    for page in response_iterator:
+        print(page)
+except Exception as e:
+    print(e)
+    raise e
