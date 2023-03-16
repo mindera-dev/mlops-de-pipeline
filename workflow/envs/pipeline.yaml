@@ -7,3 +7,4 @@ dependencies:
   - kubernetes
   - boto3
   - python-kubernetes
+  - awscli
