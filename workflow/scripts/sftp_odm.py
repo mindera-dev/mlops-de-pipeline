@@ -49,7 +49,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
             print("Unknown error: %s" % e)
             exit(1)
     '''
-    resp = false
+    resp = False
     if not resp:
         print("Pod %s does not exist. Creating it..." % name)
         pod_manifest = {
