@@ -33,7 +33,7 @@ try:
                 else:
                     print(key)
 
-    return file_list
+    print(file_list)
 
 except Exception as e:
     print(e)
