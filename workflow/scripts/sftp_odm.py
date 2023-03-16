@@ -37,12 +37,9 @@ def exec_commands(appname, image_name, commands, api_instance = None):
         config.load_incluster_config()
         api_instance = core_v1_api.CoreV1Api()
     
-    ret = api_instance.list_pod_for_all_namespaces(watch=False)
-    for i in ret.items:
-        print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
-    
     name = appname + '-' + str(round(time.time() * 1000000))
     print(name)
+    '''
     resp = None
     try:
         resp = api_instance.read_namespaced_pod(name=name,
@@ -51,7 +48,8 @@ def exec_commands(appname, image_name, commands, api_instance = None):
         if e.status != 404:
             print("Unknown error: %s" % e)
             exit(1)
-
+    '''
+    resp = false
     if not resp:
         print("Pod %s does not exist. Creating it..." % name)
         pod_manifest = {
