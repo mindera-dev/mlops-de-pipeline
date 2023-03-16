@@ -9,7 +9,7 @@ s3 = boto3.client(
 )
 print('s3: client')
 
-paginator = client.get_paginator('list_objects_v2')
+paginator = s3.get_paginator('list_objects_v2')
 response_iterator = paginator.paginate(
     Bucket=mlops-lims-dump-prod, 
     Prefix="output_files/"
