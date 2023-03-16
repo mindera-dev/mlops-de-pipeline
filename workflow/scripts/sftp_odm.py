@@ -13,7 +13,7 @@ from kubernetes.stream import stream
 # - History : 2023.01.10 V1.0 initial develop 
 #
 
-namespace = 'default'
+
 def main():    
     #Run export(sftp) odm(match-1)
     print('sftp_odm start!!')
@@ -32,11 +32,13 @@ def main():
     f.close()
 
 def exec_commands(appname, image_name, commands, api_instance = None):
+    namespace = 'default'
     if api_instance == None:
         config.load_incluster_config()
         api_instance = core_v1_api.CoreV1Api()
 
     name = appname + '-' + str(round(time.time() * 1000000))
+    print(name)
     resp = None
     try:
         resp = api_instance.read_namespaced_pod(name=name,
