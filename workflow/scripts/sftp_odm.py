@@ -39,7 +39,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
     
     name = appname + '-' + str(round(time.time() * 1000000))
     print(name)
-    '''
+    
     resp = None
     try:
         resp = api_instance.read_namespaced_pod(name=name,
@@ -48,9 +48,8 @@ def exec_commands(appname, image_name, commands, api_instance = None):
         if e.status != 404:
             print("Unknown error: %s" % e)
             exit(1)
-    '''
-    #if not resp:
-    if True:
+    
+    if not resp:    
         print("Pod %s does not exist. Creating it..." % name)
         pod_manifest = {
             'apiVersion': 'v1',
