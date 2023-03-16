@@ -39,6 +39,10 @@ def exec_commands(appname, image_name, commands, api_instance = None):
     
     name = appname + '-' + str(round(time.time() * 1000000))
     print(name)
+    
+    
+    resp = False
+    print(resp)
     '''
     resp = None
     try:
@@ -49,7 +53,6 @@ def exec_commands(appname, image_name, commands, api_instance = None):
             print("Unknown error: %s" % e)
             exit(1)
     '''
-    resp = False
     if not resp:
         print("Pod %s does not exist. Creating it..." % name)
         pod_manifest = {
