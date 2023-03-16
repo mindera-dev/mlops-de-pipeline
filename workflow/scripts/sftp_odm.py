@@ -166,7 +166,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3_region_name_odm",
-                        "value": "us-west-2"
+                        "value": "us-west-1"
                       },
                       {
                         "name": "s3_region_lims_name",
