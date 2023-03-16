@@ -33,7 +33,7 @@ def main():
 
     #make result file
     
-    f = open('dags/mlops-pipeline-result/sftp_odm.txt','w')
+    f = open('sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
 
