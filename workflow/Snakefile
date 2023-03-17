@@ -23,13 +23,15 @@ rule all: # 전체 실행 룰
 	input:
 		#MART_FILE 
 		#SFTP_MATCH1_FILE
-		EXPORT_LIMS_FILE
+		#EXPORT_LIMS_FILE
+		EXPORT_SAMPLE_FILE
 	group: "pipeline"
 
 rule sftp_odm: 
 	output: 
 		#SFTP_MATCH1_FILE 
-		EXPORT_LIMS_FILE
+		#EXPORT_LIMS_FILE
+		EXPORT_SAMPLE_FILE
 	conda: 
 		f'{ENVS_DIR}/pipeline.yaml' 
 	params:
@@ -38,5 +40,6 @@ rule sftp_odm:
 		"pipeline" 
 	script: 
 		#f'{SCRIPTS_DIR}/sftp_odm.py' 
-		f'{SCRIPTS_DIR}/export_lims.py' 
+		#f'{SCRIPTS_DIR}/export_lims.py' 
+		f'{SCRIPTS_DIR}/remain_sample.py' 
 		
