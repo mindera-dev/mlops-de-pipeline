@@ -8,11 +8,10 @@ from kubernetes.client.api import core_v1_api
 from kubernetes.client.rest import ApiException
 from kubernetes.stream import stream
 # 
-# - Comment : Run export(sftp) odm(match-1)
+# - Comment : Run export lims
 #             , make result file
 # - History : 2023.01.10 V1.0 initial develop 
 #
-
 def main():    
     print('export_lims start!!')    
     config.load_kube_config()
