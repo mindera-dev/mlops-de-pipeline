@@ -46,7 +46,6 @@ def main():
     f.close()
     print(res)
 
-
 def exec_commands(appname, image_name, commands, api_instance = None):
     namespace = 'default'
     if api_instance == None:
