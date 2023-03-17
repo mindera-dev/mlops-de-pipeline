@@ -33,7 +33,7 @@ def main():
 
     #make result file
     
-    f = open('sftp_odm.txt','w')
+    f = open('/home/ubuntu/mlops-de-pipeline/2023-03-17/sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
 
