@@ -30,7 +30,7 @@ def main():
     print(res)
     
     #make result file
-    f = open('export_lims.txt','w')
+    f = open('/home/ubuntu/mlops-de-pipeline/2023-03-17/export_lims.txt','w')
     f.write(str(res))
     f.close()
     print(snakemake.output[0])
