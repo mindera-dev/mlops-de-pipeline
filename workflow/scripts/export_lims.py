@@ -1,7 +1,7 @@
 #import k8s_exec
 #import s3_exec
 import time
-
+import os
 from kubernetes import config
 from kubernetes.client import Configuration
 from kubernetes.client.api import core_v1_api
