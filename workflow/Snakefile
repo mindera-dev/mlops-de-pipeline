@@ -26,7 +26,8 @@ rule all: # 전체 실행 룰
 		#SFTP_MATCH1_FILE
 		#EXPORT_LIMS_FILE
 		#EXPORT_SAMPLE_FILE
-		LOAD_STAMP2_FILE
+		#LOAD_STAMP2_FILE
+		LOAD_LIMS_FILE
 	group: "pipeline"
 
 rule sftp_odm: 
@@ -34,7 +35,8 @@ rule sftp_odm:
 		#SFTP_MATCH1_FILE 
 		#EXPORT_LIMS_FILE
 		#EXPORT_SAMPLE_FILE
-		LOAD_STAMP2_FILE
+		#LOAD_STAMP2_FILE
+		LOAD_LIMS_FILE
 	conda: 
 		f'{ENVS_DIR}/pipeline.yaml' 
 	params:
@@ -45,5 +47,6 @@ rule sftp_odm:
 		#f'{SCRIPTS_DIR}/sftp_odm.py' 
 		#f'{SCRIPTS_DIR}/export_lims.py' 
 		#f'{SCRIPTS_DIR}/remain_sample.py' 
-		f'{SCRIPTS_DIR}/load_stamp_2.py' 
+		#f'{SCRIPTS_DIR}/load_stamp_2.py' 
+		f'{SCRIPTS_DIR}/load_lims.py' 
 		
