@@ -43,7 +43,7 @@ def main():
     f.write(str(res))
     f.close()
 
-
+#connect k8s
 def exec_commands(appname, image_name, commands, api_instance = None):
     namespace = 'default'
     if api_instance == None:
