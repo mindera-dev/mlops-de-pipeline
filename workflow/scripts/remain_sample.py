@@ -38,7 +38,7 @@ def main():
     except OSError:
         print("Error: Failed to create the directory.")
     
-    f = open(directory + '/dags/mlops-pipeline-result/remain_sample.txt','w')    
+    f = open(directory + '/remain_sample.txt','w')    
     f.write(str(res))
     f.close()
 
