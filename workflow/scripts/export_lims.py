@@ -26,7 +26,7 @@ def main():
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
     #Run export lims
-    res = k8s_exec.exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-lims.py')
+    res = exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-lims.py', core_v1)
     print(res)
     
     #make result file
