@@ -12,6 +12,7 @@ SFTP_MATCH1_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/sftp_odm.tx
 EXPORT_SAMPLE_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/remain_sample.txt", ODATE=ODATE)
 LOAD_LIMS_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/load_lims.txt", ODATE=ODATE)
 LOAD_MATCH1_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/load_match_1.txt", ODATE=ODATE)
+LOAD_STAMP2_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/load_stamp_2.txt", ODATE=ODATE)
 LOAD_SAMPLE_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17//load_sample.txt", ODATE=ODATE)
 LOAD_FS_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/load_fs.txt", ODATE=ODATE)
 LOAD_MART_FILE = expand("/home/ubuntu/mlops-de-pipeline/2023-03-17/load_mart.txt", ODATE=ODATE)
@@ -24,14 +25,16 @@ rule all: # 전체 실행 룰
 		#MART_FILE 
 		#SFTP_MATCH1_FILE
 		#EXPORT_LIMS_FILE
-		EXPORT_SAMPLE_FILE
+		#EXPORT_SAMPLE_FILE
+		LOAD_STAMP2_FILE
 	group: "pipeline"
 
 rule sftp_odm: 
 	output: 
 		#SFTP_MATCH1_FILE 
 		#EXPORT_LIMS_FILE
-		EXPORT_SAMPLE_FILE
+		#EXPORT_SAMPLE_FILE
+		LOAD_STAMP2_FILE
 	conda: 
 		f'{ENVS_DIR}/pipeline.yaml' 
 	params:
@@ -41,5 +44,6 @@ rule sftp_odm:
 	script: 
 		#f'{SCRIPTS_DIR}/sftp_odm.py' 
 		#f'{SCRIPTS_DIR}/export_lims.py' 
-		f'{SCRIPTS_DIR}/remain_sample.py' 
+		#f'{SCRIPTS_DIR}/remain_sample.py' 
+		f'{SCRIPTS_DIR}/load_stamp_2.py' 
 		
