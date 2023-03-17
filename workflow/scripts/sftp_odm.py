@@ -1,7 +1,7 @@
 #import k8s_exec
 #import s3_exec
 import time
-
+import os
 from kubernetes import config
 from kubernetes.client import Configuration
 from kubernetes.client.api import core_v1_api
@@ -32,8 +32,14 @@ def main():
     print(res)
 
     #make result file
+    directory = "/home/ubuntu/mlops-de-pipeline/2023-03-17"
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print("Error: Failed to create the directory.")
     
-    f = open('/home/ubuntu/mlops-de-pipeline/2023-03-17/sftp_odm.txt','w')
+    f = open(directory + '/sftp_odm.txt','w')
     f.write(str(res))
     f.close()    
 
