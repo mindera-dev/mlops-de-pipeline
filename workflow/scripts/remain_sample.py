@@ -27,7 +27,7 @@ def main():
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
     
-    res = exec_commands('remainsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:2.0.1', 'python3 mlops-de-sample.py', core_v1)
+    res = exec_commands('remainsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.1', 'python3 mlops-de-sample.py', core_v1)
     print(res)
 
     #make result file
