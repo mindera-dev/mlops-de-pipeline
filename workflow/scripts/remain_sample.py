@@ -15,8 +15,7 @@ from kubernetes.stream import stream
 
 def main(): 
     #Run export remain sample list
-    print('remain sample start!!')
-    
+    print('remain sample start!!')    
     config.load_kube_config()
     try:
         c = Configuration().get_default_copy()
@@ -28,14 +27,17 @@ def main():
     
     res = exec_commands('remainsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.1', 'python3 mlops-de-sample.py', core_v1)
     print(res)
+    
 
     #make result file
     directory = "/home/ubuntu/mlops-de-pipeline/2023-03-17"
+    
     try:
         if not os.path.exists(directory):
             os.makedirs(directory)
     except OSError:
         print("Error: Failed to create the directory.")
+    
     
     f = open(directory + '/remain_sample.txt','w')    
     f.write(str(res))
