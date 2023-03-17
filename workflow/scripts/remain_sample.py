@@ -13,8 +13,7 @@ from kubernetes.stream import stream
 
 #ODATE=snakemake.config["odate"]
 
-def main():    
-    
+def main(): 
     #Run export remain sample list
     print('remain sample start!!')
     
