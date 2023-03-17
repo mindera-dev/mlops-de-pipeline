@@ -24,7 +24,7 @@ def main():
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
     
-    res = k8s_exec.exec_commands('loadlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer:V1.0.2', '/java/datatransfer.sh lims 2023-03-16')
+    res = exec_commands('loadlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer:V1.0.2', '/java/datatransfer.sh lims 2023-03-16')
     print(res)
 
     #make result file
