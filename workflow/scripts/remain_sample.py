@@ -103,6 +103,10 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
+                        "name": "dbdatabase",
+                        "value": "postgres"
+                      },
+                      {
                         "name": "dbhost_odm",
                         "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
                       },
@@ -180,7 +184,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mlops-pipeline-result-prod"
+                        "value": "mindera-mlops-prod-bucket"
                       },
                       {
                         "name": "SECRET_odm",
