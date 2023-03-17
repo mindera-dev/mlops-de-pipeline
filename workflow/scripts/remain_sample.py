@@ -12,7 +12,6 @@ from kubernetes.stream import stream
 #
 
 #ODATE=snakemake.config["odate"]
-
 def main(): 
     #Run export remain sample list
     print('remain sample start!!')    
@@ -28,7 +27,6 @@ def main():
     res = exec_commands('remainsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.1', 'python3 mlops-de-sample.py', core_v1)
     print(res)
     
-
     #make result file
     directory = "/home/ubuntu/mlops-de-pipeline/2023-03-17"
     
