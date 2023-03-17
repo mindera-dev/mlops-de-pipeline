@@ -28,7 +28,7 @@ def main():
     core_v1 = core_v1_api.CoreV1Api()
     
     #res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.0', 'python3 mlops-de-get-odm.py')
-    res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:V2.0.0', 'python3 mlops-de-get-odm.py', core_v1)
+    res = exec_commands('sftpodm', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.2', 'python3 mlops-de-get-odm.py', core_v1)
     print(res)
 
     #make result file
@@ -103,6 +103,10 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
+                        "name": "dbdatabase",
+                        "value": "postgres"
+                      },
+                      {
                         "name": "dbhost_odm",
                         "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
                       },
@@ -168,7 +172,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3_region_name",
-                        "value": "us-west-2"
+                        "value": "us-west-1"
                       },
                       {
                         "name": "s3_region_name_odm",
@@ -180,7 +184,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mlops-pipeline-result-prod"
+                        "value": "mindera-mlops-prod-bucket"
                       },
                       {
                         "name": "SECRET_odm",
