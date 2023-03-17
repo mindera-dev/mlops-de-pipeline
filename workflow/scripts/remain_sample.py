@@ -12,6 +12,7 @@ from kubernetes.stream import stream
 #
 
 #ODATE=snakemake.config["odate"]
+
 def main():    
     
     #Run export remain sample list
