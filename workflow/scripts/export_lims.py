@@ -13,10 +13,8 @@ from kubernetes.stream import stream
 # - History : 2023.01.10 V1.0 initial develop 
 #
 
-def main():
-    
-    print('export_lims start!!')
-    
+def main():    
+    print('export_lims start!!')    
     config.load_kube_config()
     try:
         c = Configuration().get_default_copy()
