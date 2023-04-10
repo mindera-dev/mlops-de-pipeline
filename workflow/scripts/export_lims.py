@@ -1,5 +1,3 @@
-#import k8s_exec
-#import s3_exec
 import time
 import os
 from kubernetes import config
@@ -12,8 +10,13 @@ from kubernetes.stream import stream
 #             , make result file
 # - History : 2023.01.10 V1.0 initial develop 
 #
-def main():    
-    print('export_lims start!!')    
+
+odate = "2023-03-17"
+
+def main():      
+    #Run export lims
+    print('export_lims start!!')
+
     config.load_kube_config()
     try:
         c = Configuration().get_default_copy()
@@ -22,27 +25,27 @@ def main():
         c.assert_hostname = False
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
-    #Run export lims
-    res = exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.2', 'python3 mlops-de-get-lims.py', core_v1)
+    shcommand = 'python3 mlops-de-get-lims.py'
+    res = exec_commands('exportlims', '827884298122.dkr.ecr.us-west-2.amazonaws.com/lambda-py-dev:v2.0.3', shcommand, core_v1)
     print(res)
-    
+
     #make result file
-    directory = "/home/ubuntu/mlops-de-pipeline/2023-03-17"
+    directory = "/home/ubuntu/mlops-de-pipeline/" + odate
     try:
         if not os.path.exists(directory):
             os.makedirs(directory)
     except OSError:
         print("Error: Failed to create the directory.")
-    
+
     f = open(directory + '/export_lims.txt','w')
     f.write(str(res))
     f.close()
+
     print(snakemake.output[0])
     f = open(snakemake.output[0],'w')
     f.write(str(res))
     f.close()
-    print(res)
-
+    
 def exec_commands(appname, image_name, commands, api_instance = None):
     namespace = 'default'
     if api_instance == None:
@@ -74,7 +77,6 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                 'securityContext': {
                     'fsGroup': 1000
                 },
-                'serviceAccountName': 'spark',
                 'ttlSecondsAfterFinished': 600,
                 'containers': [{
                     'name': name,
@@ -83,12 +85,12 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                     "args": [
                         "/bin/sh",
                         "-c",
-                        "cd /dags;while true;do date;sleep 5; done"
+                        "while true;do date;sleep 5; done"
                     ],
                     "env": [
                       {
                         "name": "dbhost",
-                        "value": "mlops-postgres.cluster-c2ptheuspjk9.us-west-2.rds.amazonaws.com"
+                        "value": "minderamlops-dev-db-cluster.cluster-cqi4kxzksugm.us-west-2.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport",
@@ -104,7 +106,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "dbhost_odm",
-                        "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
+                        "value": "minderadbdev-cluster.cluster-crbuh5ce4q2a.us-east-1.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport_odm",
@@ -112,7 +114,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "dbname_odm",
-                        "value": "minderadbprod"
+                        "value": "minderadbdev"
                       },
                       {
                         "name": "dbschema",
@@ -156,15 +158,15 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3bucktname_lims",
-                        "value": "mlops-lims-dump-prod"
+                        "value": "mlops-lims-dump"
                       },
                       {
                         "name": "s3bucktname_odm",
-                        "value": "mlops-odm-dump-prod"
+                        "value": "mlops-odm-dump"
                       },
                       {
                         "name": "s3bucktname_rnaseq",
-                        "value": "prod-dna-nexus-result"
+                        "value": "dna-nexus-result-dev"
                       },
                       {
                         "name": "s3_region_name",
@@ -180,11 +182,11 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mindera-mlops-prod-bucket"
+                        "value": "mindera-mlops-dev-bucket"
                       },
                       {
                         "name": "SECRET_odm",
-                        "value": "prod_cc_lambda_secrets"
+                        "value": "dev_cc_lambda_secrets"
                       },
                       {
                         "name": "SECRET_lims",
@@ -192,17 +194,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       }
 
                     ],
-                    'volumeMounts':[{
-                        'name': 'dags',
-                        'mountPath': '/dags'
-                    }]
                 }],
-                'volumes': [{
-                    'name': 'dags',
-                    'persistentVolumeClaim': {
-                        'claimName': 'nfs-pvc'
-                    }
-                }]
             }
         }
         resp = api_instance.create_namespaced_pod(body=pod_manifest,
@@ -236,5 +228,6 @@ def exec_commands(appname, image_name, commands, api_instance = None):
         print("Exception when calling CoreV1Api->delete_namespaced_pod: %s\n" % e)
     finally:
         return restm
+
 if __name__ == '__main__':
     main()
