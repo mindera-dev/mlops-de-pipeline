@@ -1,5 +1,6 @@
 import time
 import os
+import boto3
 from kubernetes import config
 from kubernetes.client import Configuration
 from kubernetes.client.api import core_v1_api
@@ -12,20 +13,25 @@ from kubernetes.stream import stream
 # - History : 2023.01.10 V1.0 initial develop 
 #
 
-odate = "2023-03-17"
+#odate = "2023-04-13"
+odate=snakemake.params.ODATE
+print(odate)
+odate = str(odate)[0:4] + '-' + str(odate)[4:6] + '-' + str(odate)[6:8]
+print(odate)
 
 def main():    
-    print('load_stamp2 start!!')
+    print('load_sample start!!')
 
     print('get reamin sample list!!')
     #get environment variable
-    os_aws_access_key_id = os.getenv("aws_access_key_id","")
-    os_aws_secret_access_key = os.getenv("aws_secret_access_key","")
+    os_aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID","")
+    os_aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY","")
     os_s3_region_name = os.getenv("s3_region_name","us-west-2")
-    os_bucket_name = os.getenv("access_bucket_snakemake_name", "mlops-pipeline-result")
+    os_bucket_name = os.getenv("access_bucket_snakemake_name", "mindera-mlops-prod-bucket")
 
     print("aak : " + os_aws_access_key_id)
-    print("asak : " + os_aws_secret_access_key)
+    print("asak : " + os_aws_secret_access_key)    
+    print("bucket : " + os_bucket_name)
 
     #set file name about get remain sample list txt
     file = 'not_exist_pipeline_' + odate + '.txt'
@@ -66,59 +72,63 @@ def main():
     if check_exist_file == True:
         print("file exist, file download!!")
         s3.download_file(os_bucket_name, bucket_file, local_file)
+        
+        #check remain sample list file
+        f = open(local_file, 'r')    
+        line = f.readline()
+        print("line",line)
 
-    
+        f.close()    
+
+        #Repeat load sample
+        cnt = 0
+        dict_line = eval(line)
+        result = ""
+        config.load_kube_config()
+        for i in dict_line:
+            batch = i['batch']
+            sample = i['sample']
+            config.load_kube_config()
+            try:
+                c = Configuration().get_default_copy()
+            except AttributeError:
+                c = Configuration()
+                c.assert_hostname = False
+            Configuration.set_default(c)
+            core_v1 = core_v1_api.CoreV1Api()
+            shcommand = '/java/datatransfer.sh rnaseq ' + str(batch) + ' ' + str(sample)
+            res = exec_commands('loadsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer:V1.0.2', shcommand, core_v1)
+            if "" == result:
+                result = res
+            else:
+                result = result + res
+            cnt = cnt + 1
+
+        print(result)
+
+        #make result file
+        '''
+        directory = "/home/ubuntu/mlops-de-pipeline/" + odate
+        try:
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+        except OSError:
+            print("Error: Failed to create the directory.")
+        
+        f = open(directory + '/load_sample.txt','w')
+        f.write(str(res))
+        f.close()
+        '''
+        print(snakemake.output[0])
+        f = open(snakemake.output[0],'w')
+        f.write(str(result))
+        f.close()
+
+    else:
+        print("file not exist!!")
     s3.close()
     
-    #check remain sample list file
-    f = open(local_file, 'r')    
-    line = f.readline()
-    print("line",line)
     
-    f.close()    
-    
-    #Repeat load sample
-    cnt = 0
-    dict_line = eval(line)
-    result = ""
-    config.load_kube_config()
-    for i in dict_line:
-        batch = i['batch']
-        sample = i['sample']
-        config.load_kube_config()
-        try:
-            c = Configuration().get_default_copy()
-        except AttributeError:
-            c = Configuration()
-            c.assert_hostname = False
-        Configuration.set_default(c)
-        core_v1 = core_v1_api.CoreV1Api()
-        shcommand = '/java/datatransfer.sh rnaseq ' + str(batch) + ' ' + str(sample)
-        res = exec_commands('loadsample', '827884298122.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer-dev:v1.0.2', shcommand, core_v1)
-        if "" == result:
-            result = res
-        else:
-            result = result + res
-        cnt = cnt + 1
-
-    print(result)
-
-    #make result file
-    directory = "/home/ubuntu/mlops-de-pipeline/" + odate
-    try:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-    except OSError:
-        print("Error: Failed to create the directory.")
-
-    f = open(directory + '/load_sample.txt','w')
-    f.write(str(res))
-    f.close()
-
-    print(snakemake.output[0])
-    f = open(snakemake.output[0],'w')
-    f.write(str(result))
-    f.close()
     
 def exec_commands(appname, image_name, commands, api_instance = None):
     namespace = 'default'
@@ -164,7 +174,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                     "env": [
                       {
                         "name": "dbhost",
-                        "value": "minderamlops-dev-db-cluster.cluster-cqi4kxzksugm.us-west-2.rds.amazonaws.com"
+                        "value": "mlops-postgres.cluster-c2ptheuspjk9.us-west-2.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport",
@@ -179,16 +189,16 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
-                        "name": "dbhost_odm",
-                        "value": "minderadbdev-cluster.cluster-crbuh5ce4q2a.us-east-1.rds.amazonaws.com"
+                        "name": "dbhost_lims",
+                        "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
                       },
                       {
-                        "name": "dbport_odm",
+                        "name": "dbport_lims",
                         "value": "54321"
                       },
                       {
-                        "name": "dbname_odm",
-                        "value": "minderadbdev"
+                        "name": "dbname_lims",
+                        "value": "minderadbprod"
                       },
                       {
                         "name": "dbschema",
@@ -232,15 +242,15 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3bucktname_lims",
-                        "value": "mlops-lims-dump"
+                        "value": "mlops-lims-dump-prod"
                       },
                       {
                         "name": "s3bucktname_odm",
-                        "value": "mlops-odm-dump"
+                        "value": "mlops-odm-dump-prod"
                       },
                       {
                         "name": "s3bucktname_rnaseq",
-                        "value": "dna-nexus-result-dev"
+                        "value": "prod-dna-nexus-result"
                       },
                       {
                         "name": "s3_region_name",
@@ -256,11 +266,11 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mindera-mlops-dev-bucket"
+                        "value": "mindera-mlops-prod-bucket"
                       },
                       {
                         "name": "SECRET_odm",
-                        "value": "dev_cc_lambda_secrets"
+                        "value": "prod_cc_lambda_secrets"
                       },
                       {
                         "name": "SECRET_lims",

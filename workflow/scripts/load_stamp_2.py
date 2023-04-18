@@ -11,6 +11,12 @@ from kubernetes.stream import stream
 # - History : 2023.01.10 V1.0 initial develop 
 #
 
+#odate = "2023-04-13"
+odate=snakemake.params.ODATE
+print(odate)
+odate = str(odate)[0:4] + '-' + str(odate)[4:6] + '-' + str(odate)[6:8]
+print(odate)
+
 def main():
     #Run load odm(stamp-2)
     print('load_stamp2 start!!')
@@ -23,7 +29,7 @@ def main():
         c.assert_hostname = False
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
-    res = exec_commands('loadstamp2', '779792627677.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer:V1.0.1', '/java/datatransfer.sh odm 2023-03-17 odm1.3_fullSTAMP2_ODM_Export.xml STAMP-2', core_v1)
+    res = exec_commands('loadstamp2', '779792627677.dkr.ecr.us-west-2.amazonaws.com/minderadatatransfer:V1.0.2', '/java/datatransfer.sh odm 2023-03-17 odm1.3_fullSTAMP2_ODM_Export.xml STAMP-2', core_v1)
     print(res)
 
     #make result file
@@ -72,8 +78,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
             'spec': {
                 'securityContext': {
                     'fsGroup': 1000
-                },
-                'serviceAccountName': 'spark',
+                },                
                 'ttlSecondsAfterFinished': 600,
                 'containers': [{
                     'name': name,
@@ -82,7 +87,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                     "args": [
                         "/bin/sh",
                         "-c",
-                        "cd /dags;while true;do date;sleep 5; done"
+                        "while true;do date;sleep 5; done"
                     ],
                     "env": [
                       {
@@ -102,15 +107,15 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
-                        "name": "dbhost_odm",
+                        "name": "dbhost_lims",
                         "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
                       },
                       {
-                        "name": "dbport_odm",
+                        "name": "dbport_lims",
                         "value": "54321"
                       },
                       {
-                        "name": "dbname_odm",
+                        "name": "dbname_lims",
                         "value": "minderadbprod"
                       },
                       {
@@ -191,17 +196,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       }
 
                     ],
-                    'volumeMounts':[{
-                        'name': 'dags',
-                        'mountPath': '/dags'
-                    }]
                 }],
-                'volumes': [{
-                    'name': 'dags',
-                    'persistentVolumeClaim': {
-                        'claimName': 'nfs-pvc'
-                    }
-                }]
             }
         }
         resp = api_instance.create_namespaced_pod(body=pod_manifest,

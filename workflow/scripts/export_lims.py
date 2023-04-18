@@ -11,7 +11,12 @@ from kubernetes.stream import stream
 # - History : 2023.01.10 V1.0 initial develop 
 #
 
-odate = "2023-03-17"
+#odate = "2023-04-13"
+odate=snakemake.params.ODATE
+print(odate)
+odate = str(odate)[0:4] + '-' + str(odate)[4:6] + '-' + str(odate)[6:8]
+print(odate)
+
 
 def main():      
     #Run export lims
@@ -26,21 +31,22 @@ def main():
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
     shcommand = 'python3 mlops-de-get-lims.py'
-    res = exec_commands('exportlims', '827884298122.dkr.ecr.us-west-2.amazonaws.com/lambda-py-dev:v2.0.3', shcommand, core_v1)
+    res = exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.3', shcommand, core_v1)
     print(res)
 
     #make result file
+    '''
     directory = "/home/ubuntu/mlops-de-pipeline/" + odate
     try:
         if not os.path.exists(directory):
             os.makedirs(directory)
     except OSError:
         print("Error: Failed to create the directory.")
-
+    
     f = open(directory + '/export_lims.txt','w')
     f.write(str(res))
     f.close()
-
+    '''
     print(snakemake.output[0])
     f = open(snakemake.output[0],'w')
     f.write(str(res))
@@ -90,7 +96,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                     "env": [
                       {
                         "name": "dbhost",
-                        "value": "minderamlops-dev-db-cluster.cluster-cqi4kxzksugm.us-west-2.rds.amazonaws.com"
+                        "value": "mlops-postgres.cluster-c2ptheuspjk9.us-west-2.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport",
@@ -105,16 +111,16 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
-                        "name": "dbhost_odm",
-                        "value": "minderadbdev-cluster.cluster-crbuh5ce4q2a.us-east-1.rds.amazonaws.com"
+                        "name": "dbhost_lims",
+                        "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
                       },
                       {
-                        "name": "dbport_odm",
+                        "name": "dbport_lims",
                         "value": "54321"
                       },
                       {
-                        "name": "dbname_odm",
-                        "value": "minderadbdev"
+                        "name": "dbname_lims",
+                        "value": "minderadbprod"
                       },
                       {
                         "name": "dbschema",
@@ -158,15 +164,15 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3bucktname_lims",
-                        "value": "mlops-lims-dump"
+                        "value": "mlops-lims-dump-prod"
                       },
                       {
                         "name": "s3bucktname_odm",
-                        "value": "mlops-odm-dump"
+                        "value": "mlops-odm-dump-prod"
                       },
                       {
                         "name": "s3bucktname_rnaseq",
-                        "value": "dna-nexus-result-dev"
+                        "value": "prod-dna-nexus-result"
                       },
                       {
                         "name": "s3_region_name",
@@ -182,11 +188,11 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mindera-mlops-dev-bucket"
+                        "value": "mindera-mlops-prod-bucket"
                       },
                       {
                         "name": "SECRET_odm",
-                        "value": "dev_cc_lambda_secrets"
+                        "value": "prod_cc_lambda_secrets"
                       },
                       {
                         "name": "SECRET_lims",

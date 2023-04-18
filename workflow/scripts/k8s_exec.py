@@ -49,7 +49,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                     "env": [
                       {
                         "name": "dbhost",
-                        "value": "mlops-postgres.cluster-c2ptheuspjk9.us-west-2.rds.amazonaws.com"
+                        "value": "minderamlops-dev-db-cluster.cluster-cqi4kxzksugm.us-west-2.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport",
@@ -60,8 +60,12 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                         "value": "postgres"
                       },
                       {
+                        "name": "dbdatabase",
+                        "value": "postgres"
+                      },
+                      {
                         "name": "dbhost_odm",
-                        "value": "minderadbprod-cluster.cluster-cotuitlujf92.us-west-1.rds.amazonaws.com"
+                        "value": "minderadbdev-cluster.cluster-crbuh5ce4q2a.us-east-1.rds.amazonaws.com"
                       },
                       {
                         "name": "dbport_odm",
@@ -69,7 +73,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "dbname_odm",
-                        "value": "minderadbprod"
+                        "value": "minderadbdev"
                       },
                       {
                         "name": "dbschema",
@@ -113,19 +117,23 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "s3bucktname_lims",
-                        "value": "mlops-lims-dump-prod"
+                        "value": "mlops-lims-dump"
                       },
                       {
                         "name": "s3bucktname_odm",
-                        "value": "mlops-odm-dump-prod"
+                        "value": "mlops-odm-dump"
                       },
                       {
                         "name": "s3bucktname_rnaseq",
-                        "value": "prod-dna-nexus-result"
+                        "value": "dna-nexus-result-dev"
                       },
                       {
                         "name": "s3_region_name",
                         "value": "us-west-2"
+                      },
+                      {
+                        "name": "s3_region_name_odm",
+                        "value": "us-west-1"
                       },
                       {
                         "name": "s3_region_lims_name",
@@ -133,11 +141,11 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                       },
                       {
                         "name": "access_bucket_snakemake_name",
-                        "value": "mlops-pipeline-result-prod"
+                        "value": "mindera-mlops-dev-bucket"
                       },
                       {
                         "name": "SECRET_odm",
-                        "value": "prod_cc_lambda_secrets"
+                        "value": "dev_cc_lambda_secrets"
                       },
                       {
                         "name": "SECRET_lims",
