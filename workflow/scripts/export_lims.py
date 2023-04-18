@@ -31,7 +31,7 @@ def main():
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
     shcommand = 'python3 mlops-de-get-lims.py'
-    res = exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.5', shcommand, core_v1)
+    res = exec_commands('exportlims', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.4', shcommand, core_v1)
     print(res)
 
     #make result file
@@ -83,6 +83,7 @@ def exec_commands(appname, image_name, commands, api_instance = None):
                 'securityContext': {
                     'fsGroup': 1000
                 },
+                'serviceAccountName': 'spark',
                 'ttlSecondsAfterFinished': 600,
                 'containers': [{
                     'name': name,
