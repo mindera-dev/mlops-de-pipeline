@@ -26,14 +26,15 @@ LOAD_MART_FILE = expand("/home/ubuntu/mlops-de-pipeline/{ODATE}/load_mart.txt", 
 
 rule all: 
 	input:
-		LOAD_MATCH1_FILE 		
+		LOAD_SAMPLE_FILE 		
 	group: "pipeline"
 
-rule load_odm: #load odm(match-1) 수행
+
+rule load_sample: #load sample 수행
 	input:
-		SFTP_MATCH1_FILE
+		EXPORT_SAMPLE_FILE
 	output: 
-		LOAD_MATCH1_FILE
+		LOAD_SAMPLE_FILE
 	conda: 
 		f'{ENVS_DIR}/pipeline.yaml' 
 	params:
@@ -41,12 +42,12 @@ rule load_odm: #load odm(match-1) 수행
 	group: 
 		"pipeline" 
 	script: 
-		f'{SCRIPTS_DIR}/load_match_1.py' 
+		f'{SCRIPTS_DIR}/load_sample.py' 
 		
 
-rule sftp_odm: #sftp odm 수행
+rule remain_sample: #sftp odm 수행
 	output: 
-		SFTP_MATCH1_FILE
+		EXPORT_SAMPLE_FILE
 	conda: 
 		f'{ENVS_DIR}/pipeline.yaml' 
 	params:
@@ -54,7 +55,7 @@ rule sftp_odm: #sftp odm 수행
 	group: 
 		"pipeline" 
 	script: 
-		f'{SCRIPTS_DIR}/sftp_odm.py' 
+		f'{SCRIPTS_DIR}/remain_sample.py' 
 		
 '''
 rule all: 
