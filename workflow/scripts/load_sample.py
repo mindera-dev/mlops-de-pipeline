@@ -125,10 +125,11 @@ def main():
         f.close()
 
     else:
-        print("file not exist!!")
+        result = 'file not exist!!'
+        print(result)
         print(snakemake.output[0])
         f = open(snakemake.output[0],'w')
-        f.write("file not exist!!")
+        f.write(result)
         f.close()
     s3.close()
     
