@@ -26,40 +26,6 @@ LOAD_MART_FILE = expand("/home/ubuntu/mlops-de-pipeline/{ODATE}/load_mart.txt", 
 
 rule all: 
 	input:
-		LOAD_SAMPLE_FILE 		
-	group: "pipeline"
-
-
-rule load_sample: #load sample 수행
-	input:
-		EXPORT_SAMPLE_FILE
-	output: 
-		LOAD_SAMPLE_FILE
-	conda: 
-		f'{ENVS_DIR}/pipeline.yaml' 
-	params:
-		ODATE=ODATE 
-	group: 
-		"pipeline" 
-	script: 
-		f'{SCRIPTS_DIR}/load_sample.py' 
-		
-
-rule remain_sample: #sftp odm 수행
-	output: 
-		EXPORT_SAMPLE_FILE
-	conda: 
-		f'{ENVS_DIR}/pipeline.yaml' 
-	params:
-		ODATE=ODATE 
-	group: 
-		"pipeline" 
-	script: 
-		f'{SCRIPTS_DIR}/remain_sample.py' 
-		
-'''
-rule all: 
-	input:
 		LOAD_MART_FILE 		
 	group: "pipeline"
 	
@@ -179,4 +145,3 @@ rule remain_sample: #sftp odm 수행
 	script: 
 		f'{SCRIPTS_DIR}/remain_sample.py' 
 
-'''
