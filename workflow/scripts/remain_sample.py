@@ -29,7 +29,7 @@ def main():
         c.assert_hostname = False
     Configuration.set_default(c)
     core_v1 = core_v1_api.CoreV1Api()
-    shcommand = 'python3 mlops-de-sample.py ' + odate
+    shcommand = 'python3 mlops-de-sample.py ' + str(odate)
     res = exec_commands('remainsample', '779792627677.dkr.ecr.us-west-2.amazonaws.com/lambda-py:v2.0.4', shcommand, core_v1)
     print(res)
 
